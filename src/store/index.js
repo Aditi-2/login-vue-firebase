@@ -12,7 +12,7 @@ export default new Vuex.Store({
   state: {
     auth: {
       authenticated: false,
-      email: null
+      email: ''
     }
   },
   getters: {
@@ -37,7 +37,7 @@ export default new Vuex.Store({
           commit('setAuthenticated', true)
           commit('setEmail', email)
           Vue.router.push({
-            name: 'home.index'
+            name: 'home'
           })
         })
         .catch(function (error) {
@@ -55,8 +55,9 @@ export default new Vuex.Store({
     logout ({ commit }) {
       firebase.auth().signOut().then(function () {
         commit('setAuthenticated', false)
+        commit('setEmail', '')
         Vue.router.push({
-          name: 'login.index'
+          name: 'login'
         })
       }).catch(function (error) {
         console.log(error)

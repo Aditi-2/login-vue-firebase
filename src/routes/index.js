@@ -2,7 +2,7 @@ export default [
   // Home
   {
     path: '/home',
-    name: 'home.index',
+    name: 'home',
     component: () => import('@/views/Home/index.vue'),
 
     // If the user needs to be authenticated to view this page
@@ -14,7 +14,7 @@ export default [
   // Login
   {
     path: '/login',
-    name: 'login.index',
+    name: 'login',
     component: () => import('@/views/Login/index.vue'),
 
     // If the user needs to be a guest to view this page.
