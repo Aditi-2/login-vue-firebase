@@ -1,4 +1,4 @@
-# login-page
+# Vue + Firebase Login
 
 ## Project setup
 ```
@@ -15,15 +15,12 @@ npm run serve
 npm run build
 ```
 
-### Run your tests
-```
-npm run test
-```
+## Firebase Setup
 
-### Lints and fixes files
-```
-npm run lint
-```
+### Getting firebase configuration
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+https://firebase.google.com/docs/web/setup?authuser=0#obtain-config-object
+
+### Enabling password based login for firebase
+
+https://firebase.google.com/docs/auth/web/password-auth#before_you_begin
