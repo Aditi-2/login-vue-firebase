@@ -18,6 +18,7 @@
                 placeholder="Email"
                 class="form-control"
                 autocomplete="email"
+                @change="validate"
                 required
               >
             </div>
@@ -35,12 +36,24 @@
                 placeholder="Password"
                 class="form-control"
                 autocomplete="password"
+                @change="validate"
                 required
               >
             </div>
           </div>
+          <p v-if="errors.length">
+            <b>Please correct the following error(s):</b>
+              <ul>
+                <li
+                v-for="(error, index) in errors"
+                v-bind:key="index"
+                >
+                {{ error }}
+                </li>
+              </ul>
+          </p>
           <div class="form-group">
-            <button class="btn btn-outline-primary">
+            <button class="btn btn-primary" :disabled="isPristine || errors.length > 0">
               Login
             </button>
           </div>
@@ -63,6 +76,8 @@ export default {
    */
   data () {
     return {
+      errors: [],
+      isPristine: true,
       user: {
         email: '',
         password: ''
@@ -80,8 +95,23 @@ export default {
      * @param {Object} user The user to be logged in.
      */
     login (user) {
-      console.log(user)
       this.$store.dispatch('login', user)
+    },
+    validateEmail (email) {
+      const re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+      return re.test(String(email).toLowerCase())
+    },
+    validate () {
+      this.errors = []
+      this.isPristine = false
+
+      if (!this.validateEmail(this.user.email)) {
+        this.errors.push('Invalid email address')
+      }
+
+      if (this.user.password.length < 8) {
+        this.errors.push('Password should be of atleast 8 characters')
+      }
     }
   }
 }
