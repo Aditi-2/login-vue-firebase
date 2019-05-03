@@ -1,65 +1,62 @@
 <template>
-    <div contextual-style="dark">
-      <span slot="header">
-        Login
-      </span>
-      <div slot="body">
-        <form @submit.prevent="login(user)">
-          <div class="form-group">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text">
-                  <i class="fa fa-envelope fa-fw"/>
-                </span>
+  <b-container class="bv-example-row">
+    <b-row class="justify-content-md-center">
+      <b-col cols="5" align-self="center">
+        <b-card class="text-center card-position" title="Login">
+          <div class>
+            <b-form @submit.prevent="login(user)">
+              <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fa fa-envelope fa-fw"/>
+                    </span>
+                  </div>
+                  <b-input
+                    v-model="user.email"
+                    type="email"
+                    placeholder="Email"
+                    class="form-control"
+                    autocomplete="email"
+                    :state="emailValidation"
+                    required
+                  ></b-input>
+                  <b-form-invalid-feedback :state="emailValidation">Invalid email address</b-form-invalid-feedback>
+                </div>
               </div>
-              <input
-                v-model="user.email"
-                type="email"
-                placeholder="Email"
-                class="form-control"
-                autocomplete="email"
-                @change="validate"
-                required
-              >
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text">
-                  <i class="fa fa-lock fa-fw"/>
-                </span>
+              <div class="form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="fa fa-lock fa-fw"/>
+                    </span>
+                  </div>
+                  <b-input
+                    v-model="user.password"
+                    type="password"
+                    placeholder="Password"
+                    class="form-control"
+                    autocomplete="password"
+                    :state="passwordValidation"
+                    required
+                  ></b-input>
+                  <b-form-invalid-feedback
+                    :state="passwordValidation"
+                  >Password should be of atleast 8 characters</b-form-invalid-feedback>
+                </div>
               </div>
-              <input
-                v-model="user.password"
-                type="password"
-                placeholder="Password"
-                class="form-control"
-                autocomplete="password"
-                @change="validate"
-                required
-              >
-            </div>
+              <div class="form-group">
+                <button
+                  class="btn btn-primary"
+                  :disabled="!emailValidation || !passwordValidation"
+                >Login</button>
+              </div>
+            </b-form>
           </div>
-          <p v-if="errors.length">
-            <b>Please correct the following error(s):</b>
-              <ul>
-                <li
-                v-for="(error, index) in errors"
-                v-bind:key="index"
-                >
-                {{ error }}
-                </li>
-              </ul>
-          </p>
-          <div class="form-group">
-            <button class="btn btn-primary" :disabled="isPristine || errors.length > 0">
-              Login
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        </b-card>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
@@ -76,12 +73,11 @@ export default {
    */
   data () {
     return {
-      errors: [],
-      isPristine: true,
       user: {
         email: '',
         password: ''
-      }
+      },
+      userId: ''
     }
   },
 
@@ -96,23 +92,21 @@ export default {
      */
     login (user) {
       this.$store.dispatch('login', user)
-    },
-    validateEmail (email) {
+    }
+  },
+  computed: {
+    emailValidation () {
       const re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
-      return re.test(String(email).toLowerCase())
+      return re.test(String(this.user.email).toLowerCase())
     },
-    validate () {
-      this.errors = []
-      this.isPristine = false
-
-      if (!this.validateEmail(this.user.email)) {
-        this.errors.push('Invalid email address')
-      }
-
-      if (this.user.password.length < 8) {
-        this.errors.push('Password should be of atleast 8 characters')
-      }
+    passwordValidation () {
+      return this.user.password.length > 8 && this.user.password.length < 250
     }
   }
 }
 </script>
+<style>
+.card-position {
+  margin-top: 10%;
+}
+</style>
